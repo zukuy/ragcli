@@ -37,6 +37,47 @@ cargo run -- index ./docs
 cargo run -- query "What is this project about?"
 ```
 
+## macOS Installation
+
+`ragcli` has two dependency profiles depending on how you install and use it.
+
+### Minimal — Personal Use (binary only)
+
+If you install via Homebrew or download a pre-built binary, you only need:
+
+- [Ollama](https://ollama.com/) running locally
+- The embedding and chat models pulled via `ollama pull`
+
+No build tools required.
+
+### All — Build from Source
+
+To compile from source you need the full Rust toolchain plus a few system libraries:
+
+```bash
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Install protobuf compiler (required by LanceDB's gRPC layer)
+brew install protobuf cmake
+```
+
+Then clone and build:
+
+```bash
+git clone https://github.com/zukuy/ragcli.git
+cd ragcli
+cargo build --release
+
+# Run directly
+./target/release/ragcli doctor
+
+# Or install via cargo
+cargo install --path .
+```
+
+**Why `protobuf` and `cmake`?** LanceDB uses gRPC via the `prost` crate, which compiles `.proto` files at build time. `cmake` is required by one of LanceDB's native dependencies.
+
 ## Commands
 
 Index a directory or file:
